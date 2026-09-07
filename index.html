@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tefuda サポート</title>
+<meta name="description" content="Tefuda の使い方と、Google スプレッドシート連携の設定手順。">
+<style>
+:root {
+  --key: #2E8E71;
+  --key-deep: #18634C;
+  --ink: #1c1c1e;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --bg: #ffffff;
+  --code-bg: #f6f8f7;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --key: #74B79E; --key-deep: #9BD3BC; --ink: #ececec; --muted: #a1a1aa;
+    --line: #303034; --bg: #131315; --code-bg: #1b1c1e;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  line-height: 1.85; font-size: 16px;
+}
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 20px 80px; }
+header { padding: 48px 0 32px; border-bottom: 1px solid var(--line); margin-bottom: 40px; }
+.brand { display: flex; align-items: center; gap: 16px; }
+.brand img { width: 68px; height: 68px; border-radius: 15px; }
+h1 { font-size: 30px; margin: 0; letter-spacing: .02em; }
+.tagline { color: var(--muted); margin: 6px 0 0; font-size: 15px; }
+h2 { font-size: 22px; margin: 52px 0 14px; padding-top: 8px; }
+h3 { font-size: 17px; margin: 32px 0 10px; }
+p, li { color: var(--ink); }
+a { color: var(--key); }
+nav.toc { background: var(--code-bg); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; }
+nav.toc ol { margin: 0; padding-left: 22px; }
+nav.toc li { margin: 4px 0; }
+code { background: var(--code-bg); padding: 2px 6px; border-radius: 5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; }
+pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 12px;
+  padding: 16px; overflow-x: auto; position: relative; }
+pre code { background: none; padding: 0; font-size: 13px; line-height: 1.6; }
+.copy { position: absolute; top: 10px; right: 10px; font-size: 12px; padding: 5px 11px;
+  border: 1px solid var(--line); border-radius: 7px; background: var(--bg);
+  color: var(--key); cursor: pointer; font-family: inherit; }
+.copy:hover { background: var(--key); color: #fff; border-color: var(--key); }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--line); padding: 8px 11px; text-align: left; white-space: nowrap; }
+th { background: var(--code-bg); font-weight: 600; }
+.note { border-left: 3px solid var(--key); background: var(--code-bg);
+  padding: 14px 18px; border-radius: 0 10px 10px 0; margin: 20px 0; }
+.warn { border-left-color: #e08a2e; }
+.step { counter-increment: step; }
+ol.steps { padding-left: 0; list-style: none; counter-reset: step; }
+ol.steps > li { position: relative; padding-left: 44px; margin: 26px 0; }
+ol.steps > li::before {
+  content: counter(step); position: absolute; left: 0; top: 1px;
+  width: 30px; height: 30px; border-radius: 50%; background: var(--key); color: #fff;
+  display: grid; place-items: center; font-weight: 700; font-size: 15px;
+}
+footer { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: 14px; }
+.pill { display: inline-block; background: var(--code-bg); border: 1px solid var(--line);
+  border-radius: 999px; padding: 3px 12px; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand">
+    <img src="icon.png" alt="Tefuda">
+    <div>
+      <h1>Tefuda</h1>
+      <p class="tagline">あなただけの、英単語学習アプリ</p>
+    </div>
+  </div>
+</header>
+
+<p>
+  Tefuda は、あなたが Google スプレッドシートに書いた単語を、そのまま単語帳として使うアプリです。
+  このページでは、その連携の設定手順を最初から順に説明します。
+</p>
+
+<div class="note">
+  <strong>スプレッドシート連携は必須ではありません。</strong>
+  アプリの中だけで単語を追加して使うこともできますし、CSV の読み込み・書き出しにも対応しています。
+  シートと繋ぐと、PC で編集した内容がアプリに反映され、アプリで覚えた結果がシートへ書き戻ります。
+</div>
+
+<nav class="toc">
+  <ol>
+    <li><a href="#prepare">スプレッドシートを用意する</a></li>
+    <li><a href="#columns">列の見出しを入れる</a></li>
+    <li><a href="#script">Apps Script を貼り付ける</a></li>
+    <li><a href="#deploy">ウェブアプリとして公開する</a></li>
+    <li><a href="#connect">アプリに URL を入れる</a></li>
+    <li><a href="#columns-ref">列の意味（一覧）</a></li>
+    <li><a href="#ai">例文などの自動生成について</a></li>
+    <li><a href="#faq">うまくいかないとき</a></li>
+    <li><a href="#contact">お問い合わせ</a></li>
+  </ol>
+</nav>
+
+<h2 id="prepare">1. スプレッドシートを用意する</h2>
+
+<ol class="steps">
+  <li>
+    <p>Google スプレッドシートで新しいファイルを作ります。名前は何でも構いません。</p>
+  </li>
+  <li>
+    <p>シート（画面下のタブ）を <strong>2 枚</strong>用意し、名前をそれぞれ
+    <code>単語</code> と <code>文章</code> にします。</p>
+    <div class="note warn">
+      <strong>シート名は必ずこの 2 つにしてください。</strong>
+      Apps Script はシートを<em>名前で</em>探します。名前が違うと見つけられません。
+      逆に、名前さえ合っていればタブの順番を入れ替えても壊れません。
+    </div>
+  </li>
+  <li>
+    <p>文章を使わない場合でも、<code>文章</code>シートは空のまま置いておいてください。</p>
+  </li>
+</ol>
+
+<h2 id="columns">2. 列の見出しを入れる</h2>
+
+<p>それぞれのシートの <strong>1 行目</strong>に、次の見出しを入れます。
+順番は自由で、間に自分用の列を挟んでも構いません（アプリは見出しの名前で探します）。</p>
+
+<h3><code>単語</code>シート</h3>
+<pre><code>english	japanese	pos	example	example_jp	example_blank	answer_display	etymology	derivatives	idioms	other_meanings	synonyms	mastery	is_active	added_date	mastered_date	last_graded</code></pre>
+
+<h3><code>文章</code>シート</h3>
+<pre><code>english	japanese	section	order	mastery	is_active	added_date	mastered_date	last_graded</code></pre>
+
+<div class="note">
+  上のブロックはタブ区切りです。「コピー」を押してシートの <strong>A1 セル</strong>に貼り付けると、
+  各列に分かれて入ります。
+</div>
+
+<p>
+  最初は <code>english</code> と <code>japanese</code> だけ埋めれば充分です。
+  品詞・例文・語源などの空欄は、アプリの「空欄をまとめて埋める」で自動生成できます。
+</p>
+
+<h2 id="script">3. Apps Script を貼り付ける</h2>
+
+<ol class="steps">
+  <li><p>スプレッドシートのメニューから <strong>拡張機能 → Apps Script</strong> を開きます。</p></li>
+  <li><p>最初から入っているコードを<strong>すべて消して</strong>、下のコードを貼り付けます。</p></li>
+  <li><p>保存します（⌘S）。</p></li>
+</ol>
+
+<pre><code>/**
+ * 復習カード用 Apps Script Web App。
+ *
+ * この版で守っていること:
+ *
+ * 1. シートは「名前」で引く（getSheetByName）。
+ *    並び順（getSheets()[0]）で引くと、タブを並べ替えただけで
+ *    単語と文章が丸ごと入れ替わる。
+ *
+ * 2. 列は「見出し名」で対応づける（headerMap_）。
+ *    位置で書くと、列を足したり並べ替えたりしたときに
+ *    別の列を踏みつぶす。
+ *
+ * 3. 知らない列は触らない。
+ *    アプリが送ってこないキーの列は、既存の値をそのまま残す。
+ *    手で足したメモ列などが消えない。
+ *
+ * デプロイ: 「デプロイ」→「新しいデプロイ」→ 種類「ウェブアプリ」
+ *   次のユーザーとして実行: 自分
+ *   アクセスできるユーザー: 全員
+ */
+
+// シート名。スプレッドシート側のタブ名と一致させること。
+const WORD_SHEET = &#x27;単語&#x27;;
+const SENTENCE_SHEET = &#x27;文章&#x27;;
+
+// アプリが読み書きする列の見出し。並び順は問わない。
+// weblio 列は置いていない。Weblio の URL は単語から組み立てられるので、
+// 列に持つと同じ情報を二重に持つことになる。ここに &#x27;weblio&#x27; を残すと、
+// シートから列を消しても headerMap_ が末尾に作り直してしまう。
+const WORD_COLS = [
+  &#x27;english&#x27;, &#x27;japanese&#x27;, &#x27;pos&#x27;, &#x27;example&#x27;, &#x27;example_jp&#x27;, &#x27;example_blank&#x27;,
+  &#x27;answer_display&#x27;, &#x27;etymology&#x27;, &#x27;derivatives&#x27;, &#x27;idioms&#x27;,
+  &#x27;other_meanings&#x27;, &#x27;synonyms&#x27;, &#x27;mastery&#x27;, &#x27;is_active&#x27;,
+  &#x27;added_date&#x27;, &#x27;mastered_date&#x27;, &#x27;last_graded&#x27;,
+];
+
+const SENT_COLS = [
+  &#x27;english&#x27;, &#x27;japanese&#x27;, &#x27;section&#x27;, &#x27;order&#x27;, &#x27;mastery&#x27;, &#x27;is_active&#x27;,
+  &#x27;added_date&#x27;, &#x27;mastered_date&#x27;, &#x27;last_graded&#x27;,
+];
+
+// ---------------------------------------------------------------- 入口
+
+function doGet() {
+  return json_({
+    words: readSheet_(WORD_SHEET, WORD_COLS),
+    sentences: readSheet_(SENTENCE_SHEET, SENT_COLS),
+  });
+}
+
+function doPost(e) {
+  try {
+    const payload = JSON.parse(e.postData.contents);
+    if (payload.words) writeSheet_(WORD_SHEET, WORD_COLS, payload.words);
+    if (payload.sentences) writeSheet_(SENTENCE_SHEET, SENT_COLS, payload.sentences);
+    return json_({ ok: true });
+  } catch (err) {
+    return json_({ ok: false, error: String(err) });
+  }
+}
+
+// ---------------------------------------------------------------- 中身
+
+function json_(value) {
+  return ContentService
+    .createTextOutput(JSON.stringify(value))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/** 名前でシートを引く。無ければ作る。順番には一切依存しない。 */
+function sheet_(name, cols) {
+  const book = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = book.getSheetByName(name);
+  if (!sheet) {
+    sheet = book.insertSheet(name);
+    sheet.getRange(1, 1, 1, cols.length).setValues([cols]);
+  }
+  return sheet;
+}
+
+/** 見出し行から「列名 → 列番号(0始まり)」を作る。足りない見出しは末尾に足す。 */
+function headerMap_(sheet, cols) {
+  const width = Math.max(sheet.getLastColumn(), 1);
+  const header = sheet.getRange(1, 1, 1, width).getValues()[0]
+    .map(function (v) { return String(v).trim(); });
+
+  const map = {};
+  header.forEach(function (name, index) {
+    if (name &amp;&amp; !(name in map)) map[name] = index;
+  });
+
+  // アプリが使う列で、まだシートに無いものだけを末尾に追加する。
+  const missing = cols.filter(function (name) { return !(name in map); });
+  if (missing.length) {
+    sheet.getRange(1, header.length + 1, 1, missing.length).setValues([missing]);
+    missing.forEach(function (name, i) { map[name] = header.length + i; });
+  }
+  return map;
+}
+
+function readSheet_(name, cols) {
+  const sheet = sheet_(name, cols);
+  const map = headerMap_(sheet, cols);
+  const rows = sheet.getLastRow() - 1;
+  if (rows &lt; 1) return [];
+
+  const values = sheet.getRange(2, 1, rows, sheet.getLastColumn()).getValues();
+  return values
+    .filter(function (row) { return String(row[map[&#x27;english&#x27;]]).trim() !== &#x27;&#x27;; })
+    .map(function (row) {
+      const out = {};
+      cols.forEach(function (key) {
+        const at = map[key];
+        out[key] = at === undefined ? &#x27;&#x27; : row[at];
+      });
+      return out;
+    });
+}
+
+/**
+ * 全置換で書く。ただし
+ *  - 列は見出し名で位置を決める
+ *  - アプリが送ってこない列は、同じ english の既存行から引き継ぐ
+ */
+function writeSheet_(name, cols, records) {
+  const sheet = sheet_(name, cols);
+  const map = headerMap_(sheet, cols);
+  const width = sheet.getLastColumn();
+
+  // 既存行を english で引けるようにしておく（知らない列を残すため）。
+  const kept = {};
+  const rows = sheet.getLastRow() - 1;
+  if (rows &gt; 0) {
+    sheet.getRange(2, 1, rows, width).getValues().forEach(function (row) {
+      const key = String(row[map[&#x27;english&#x27;]]).trim();
+      if (key) kept[key] = row;
+    });
+  }
+
+  const out = records.map(function (record) {
+    const key = String(record[&#x27;english&#x27;]).trim();
+    const row = kept[key] ? kept[key].slice() : new Array(width).fill(&#x27;&#x27;);
+    while (row.length &lt; width) row.push(&#x27;&#x27;);
+
+    cols.forEach(function (col) {
+      // 送られてこなかったキーは触らない（既存の値を残す）。
+      if (!(col in record)) return;
+      const at = map[col];
+      if (at !== undefined) row[at] = record[col];
+    });
+    return row;
+  });
+
+  if (rows &gt; 0) sheet.getRange(2, 1, rows, width).clearContent();
+  if (out.length) sheet.getRange(2, 1, out.length, width).setValues(out);
+}
+</code></pre>
+
+<div class="note">
+  このスクリプトは、シートを<strong>名前で</strong>探し、列を<strong>見出しの名前で</strong>対応づけます。
+  そのため、タブを並べ替えても、列を足しても、順番を変えても壊れません。
+  アプリが知らない列（自分用のメモ列など）は、書き戻しのときもそのまま残ります。
+</div>
+
+<h2 id="deploy">4. ウェブアプリとして公開する</h2>
+
+<ol class="steps">
+  <li><p>Apps Script の画面で右上の <strong>デプロイ → 新しいデプロイ</strong> を選びます。</p></li>
+  <li><p>歯車アイコンから種類に <strong>ウェブアプリ</strong> を選びます。</p></li>
+  <li>
+    <p>次のとおり設定します。</p>
+    <table>
+      <tr><th>項目</th><th>選ぶもの</th></tr>
+      <tr><td>次のユーザーとして実行</td><td>自分</td></tr>
+      <tr><td>アクセスできるユーザー</td><td>全員</td></tr>
+    </table>
+    <div class="note warn">
+      <strong>「全員」を選んでも、シートが公開されるわけではありません。</strong>
+      公開されるのはこの窓口（URL）だけで、シート自体は非公開のままです。
+      ただし <strong>URL を知っている人は読み書きできます</strong>。
+      パスワードと同じように扱い、人に見せないでください。
+      アプリはこの URL を iPhone の Keychain に保存します。
+    </div>
+  </li>
+  <li><p>初回はアクセスの承認を求められます。案内に従って許可します。</p></li>
+  <li>
+    <p>表示される <strong>ウェブアプリの URL</strong> をコピーします。
+    <code>https://script.google.com/macros/s/……/exec</code> という形です。</p>
+  </li>
+</ol>
+
+<h2 id="connect">5. アプリに URL を入れる</h2>
+
+<ol class="steps">
+  <li><p>Tefuda を開き、右上の <strong>≡</strong> から <strong>設定</strong> を開きます。</p></li>
+  <li><p>いちばん上の欄に、コピーした URL を貼り付けます。</p></li>
+  <li><p><strong>接続して同期</strong> を押します。「☁ 同期済み」と出れば成功です。</p></li>
+</ol>
+
+<div class="note">
+  <strong>別のシートに繋ぎ替えるときは、「端末を空にしてから接続」を使ってください。</strong>
+  前のシートの単語が端末に残っていると、書き戻しのときに新しいシートへ流れ込みます。
+</div>
+
+<h2 id="columns-ref">6. 列の意味（一覧）</h2>
+
+<p>手で埋める必要があるのは <code>english</code> と <code>japanese</code> だけです。
+他はアプリが書き込むか、自動生成できます。</p>
+
+<h3><code>単語</code>シート</h3>
+<table>
+  <tr><th>列</th><th>意味</th><th>誰が入れるか</th></tr>
+  <tr><td>english</td><td>英単語・熟語。この列が各行の目印になります</td><td>あなた</td></tr>
+  <tr><td>japanese</td><td>日本語の意味</td><td>あなた</td></tr>
+  <tr><td>pos</td><td>品詞</td><td>自動生成</td></tr>
+  <tr><td>example</td><td>例文</td><td>自動生成</td></tr>
+  <tr><td>example_jp</td><td>例文の訳</td><td>自動生成</td></tr>
+  <tr><td>example_blank</td><td>穴埋め用に対象語を伏せた例文</td><td>アプリ</td></tr>
+  <tr><td>answer_display</td><td>穴埋めの答え（例文中の活用形）</td><td>アプリ</td></tr>
+  <tr><td>etymology</td><td>語源</td><td>自動生成</td></tr>
+  <tr><td>derivatives</td><td>派生語</td><td>自動生成</td></tr>
+  <tr><td>idioms</td><td>イディオム</td><td>自動生成</td></tr>
+  <tr><td>other_meanings</td><td>他の意味</td><td>自動生成</td></tr>
+  <tr><td>synonyms</td><td>類似語</td><td>自動生成</td></tr>
+  <tr><td>mastery</td><td>習熟度（0〜100）</td><td>アプリ</td></tr>
+  <tr><td>is_active</td><td>学習対象か（暗記済みにすると FALSE）</td><td>アプリ</td></tr>
+  <tr><td>added_date</td><td>追加日</td><td>アプリ</td></tr>
+  <tr><td>mastered_date</td><td>習得した日</td><td>アプリ</td></tr>
+  <tr><td>last_graded</td><td>最後に採点した日時</td><td>アプリ</td></tr>
+</table>
+
+<h3><code>文章</code>シート</h3>
+<table>
+  <tr><th>列</th><th>意味</th><th>誰が入れるか</th></tr>
+  <tr><td>english</td><td>英文</td><td>あなた</td></tr>
+  <tr><td>japanese</td><td>日本語訳</td><td>あなた</td></tr>
+  <tr><td>section</td><td>章の名前。章ごとに練習できます</td><td>あなた</td></tr>
+  <tr><td>order</td><td>章の中での並び順。章ごとに 1 から振ります</td><td>あなた</td></tr>
+  <tr><td>mastery / is_active / added_date / mastered_date / last_graded</td><td>単語シートと同じ</td><td>アプリ</td></tr>
+</table>
+
+<div class="note">
+  <strong><code>order</code> を入れると、「リストの順番」で出題できます。</strong>
+  章立ての教材を頭から順に潰していきたいときに使います。
+  間に差し込む予定があるなら、1・2・3 ではなく 10・20・30 と振っておくと後が楽です。
+</div>
+
+<h2 id="ai">7. 例文などの自動生成について</h2>
+
+<p>
+  単語と訳だけ入れておけば、<strong>品詞・例文・例文の訳・語源・派生語・イディオム・他の意味・類似語</strong>を
+  自動で作れます。穴埋め問題もそこから組み立てられます。
+  一覧の「空欄をまとめて埋める」を押せば、足りない項目だけをまとめて補えます。
+</p>
+
+<p>
+  既定では <strong>Apple Intelligence の端末内モデル</strong>を使います。
+  通信は発生せず、入力した単語が端末の外へ出ることはありません。追加の費用もかかりません。
+  設定で Claude API に切り替えることもできます（利用者自身の API キーが必要で、語数ぶん課金されます）。
+</p>
+
+<div class="note warn">
+  <strong>生成された内容には誤りが含まれることがあります。</strong>
+  とくに<strong>語源</strong>は、端末内モデルが実際とは違う説明を作ることがあります。
+  例文や語義も、文脈によっては不自然なことがあります。
+  そのまま覚え込む前に目を通し、おかしいところは一覧から直してください
+  （行をタップすると編集できます。手で直した内容は「空欄を埋める」で上書きされません）。
+</div>
+
+<div class="note">
+  端末内での生成には <strong>Apple Intelligence に対応した端末</strong>と、
+  設定でのオンが必要です。使えない場合は、下の「うまくいかないとき」を参照してください。
+</div>
+
+<h2 id="faq">8. うまくいかないとき</h2>
+
+<h3>「接続して同期」でエラーが出る</h3>
+<ul>
+  <li>URL の末尾が <code>/exec</code> になっているか確認してください（<code>/dev</code> では動きません）</li>
+  <li>デプロイの「アクセスできるユーザー」が<strong>全員</strong>になっているか確認してください</li>
+  <li>スクリプトを直したあとは、<strong>デプロイし直す</strong>必要があります。
+      「デプロイを管理」から編集し、バージョンを「新バージョン」にして更新してください</li>
+</ul>
+
+<h3>「リストの順番」で並ばない</h3>
+<p>
+  設定画面の「文章シートの order 列」を見てください。
+  <strong>届いていません</strong>と出ている場合は、Apps Script の <code>SENT_COLS</code> に
+  <code>'order'</code> が入っているか確認してください。
+  <strong>列はあるが番号が空</strong>と出ている場合は、シートの <code>order</code> 列に番号を入れてください。
+</p>
+
+<h3>単語と文章が入れ替わってしまった</h3>
+<p>
+  シートを<em>名前</em>ではなく<em>順番</em>で参照する古いスクリプトを使っていると、
+  タブを並べ替えただけで中身が入れ替わります。このページのスクリプトに差し替えてください。
+  アプリ側でも入れ替わりを検知して取り込みを止めますが、
+  すでにシートが壊れている場合は、スプレッドシートの
+  <strong>ファイル → 変更履歴</strong> から壊れる前の版に戻してください。
+</p>
+
+<h3>例文の自動生成が使えない</h3>
+<p>
+  端末内の生成には Apple Intelligence が必要です。設定 → Apple Intelligence と Siri で、
+  <strong>Apple Intelligence と Siri の両方</strong>をオンにしてください。
+  スクリーンタイムの「コンテンツとプライバシーの制限」で塞がれていることもあります。
+  アプリの設定画面に「端末内モデルの診断」があるので、原因の切り分けに使えます。
+</p>
+
+<h3>読み上げが鳴らない・発音が不自然</h3>
+<p>
+  設定 → 読み上げ で、使っている音声を確認できます。
+  「自動の選び直し」を押すと選び直します。高品質な音声は
+  設定 → アクセシビリティ → 読み上げコンテンツ → 声 → 英語 から追加できます。
+</p>
+
+<h2 id="contact">9. お問い合わせ</h2>
+<p>
+  不具合のご報告・ご要望は、下記までお願いします。
+  端末（iPhone / iPad）と iOS のバージョン、再現の手順を添えていただけると助かります。
+</p>
+<p><a href="mailto:ryu.furusawa@gmail.com">ryu.furusawa@gmail.com</a></p>
+
+<footer>
+  <p><a href="./">サポート</a> ・ <a href="privacy.html">プライバシーポリシー</a></p>
+  <p>Tefuda</p>
+</footer>
+</div>
+<script>
+document.querySelectorAll('pre').forEach(function (pre) {
+  var b = document.createElement('button');
+  b.className = 'copy'; b.textContent = 'コピー';
+  b.addEventListener('click', function () {
+    navigator.clipboard.writeText(pre.querySelector('code').innerText).then(function () {
+      b.textContent = 'コピーしました';
+      setTimeout(function () { b.textContent = 'コピー'; }, 1600);
+    });
+  });
+  pre.appendChild(b);
+});
+</script>
+</body>
+</html>

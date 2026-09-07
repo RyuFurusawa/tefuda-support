@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tefuda プライバシーポリシー</title>
+<meta name="description" content="Tefuda が扱うデータについて。">
+<style>
+:root {
+  --key: #2E8E71;
+  --key-deep: #18634C;
+  --ink: #1c1c1e;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --bg: #ffffff;
+  --code-bg: #f6f8f7;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --key: #74B79E; --key-deep: #9BD3BC; --ink: #ececec; --muted: #a1a1aa;
+    --line: #303034; --bg: #131315; --code-bg: #1b1c1e;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  line-height: 1.85; font-size: 16px;
+}
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 20px 80px; }
+header { padding: 48px 0 32px; border-bottom: 1px solid var(--line); margin-bottom: 40px; }
+.brand { display: flex; align-items: center; gap: 16px; }
+.brand img { width: 68px; height: 68px; border-radius: 15px; }
+h1 { font-size: 30px; margin: 0; letter-spacing: .02em; }
+.tagline { color: var(--muted); margin: 6px 0 0; font-size: 15px; }
+h2 { font-size: 22px; margin: 52px 0 14px; padding-top: 8px; }
+h3 { font-size: 17px; margin: 32px 0 10px; }
+p, li { color: var(--ink); }
+a { color: var(--key); }
+nav.toc { background: var(--code-bg); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; }
+nav.toc ol { margin: 0; padding-left: 22px; }
+nav.toc li { margin: 4px 0; }
+code { background: var(--code-bg); padding: 2px 6px; border-radius: 5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; }
+pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 12px;
+  padding: 16px; overflow-x: auto; position: relative; }
+pre code { background: none; padding: 0; font-size: 13px; line-height: 1.6; }
+.copy { position: absolute; top: 10px; right: 10px; font-size: 12px; padding: 5px 11px;
+  border: 1px solid var(--line); border-radius: 7px; background: var(--bg);
+  color: var(--key); cursor: pointer; font-family: inherit; }
+.copy:hover { background: var(--key); color: #fff; border-color: var(--key); }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--line); padding: 8px 11px; text-align: left; white-space: nowrap; }
+th { background: var(--code-bg); font-weight: 600; }
+.note { border-left: 3px solid var(--key); background: var(--code-bg);
+  padding: 14px 18px; border-radius: 0 10px 10px 0; margin: 20px 0; }
+.warn { border-left-color: #e08a2e; }
+.step { counter-increment: step; }
+ol.steps { padding-left: 0; list-style: none; counter-reset: step; }
+ol.steps > li { position: relative; padding-left: 44px; margin: 26px 0; }
+ol.steps > li::before {
+  content: counter(step); position: absolute; left: 0; top: 1px;
+  width: 30px; height: 30px; border-radius: 50%; background: var(--key); color: #fff;
+  display: grid; place-items: center; font-weight: 700; font-size: 15px;
+}
+footer { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: 14px; }
+.pill { display: inline-block; background: var(--code-bg); border: 1px solid var(--line);
+  border-radius: 999px; padding: 3px 12px; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand">
+    <img src="icon.png" alt="Tefuda">
+    <div>
+      <h1>プライバシーポリシー</h1>
+      <p class="tagline">Tefuda</p>
+    </div>
+  </div>
+</header>
+
+<p>最終更新日: 2026-09-07</p>
+
+<h2>要点</h2>
+<div class="note">
+  <p style="margin:0">
+    Tefuda は<strong>利用者を追跡しません</strong>。広告や解析の仕組みは入っていません。
+    開発者がデータを受け取ることもありません。
+    データが端末の外へ出るのは、<strong>利用者自身が設定したときだけ</strong>です。
+  </p>
+</div>
+
+<h2>端末の中に保存されるもの</h2>
+<ul>
+  <li>単語・文章とその学習状況（習熟度、最後に採点した日時など）</li>
+  <li>出題の設定（問題数、習熟度の計算式、読み上げの音声など）</li>
+  <li>スプレッドシートの URL と、Anthropic の API キー — この 2 つは
+      <strong>iOS の Keychain</strong> に保存します</li>
+</ul>
+<p>これらはすべて端末内に保存されます。開発者はアクセスできません。</p>
+
+<h2>端末の外へ出るもの</h2>
+
+<h3>Google スプレッドシート（利用者が設定した場合のみ）</h3>
+<p>
+  設定画面で URL を登録すると、単語・文章とその学習状況が、
+  <strong>利用者自身の</strong>スプレッドシートとやり取りされます。
+  送り先は利用者が指定した URL のみで、開発者のサーバーは経由しません。
+</p>
+
+<h3>Anthropic（設定で Claude を選んだ場合のみ）</h3>
+<p>
+  例文などの自動生成は、既定では<strong>端末内のモデル（Apple Intelligence）</strong>で行われ、
+  通信は発生しません。設定で生成方法を Claude API に切り替え、利用者自身の API キーを
+  登録した場合にかぎり、単語とその意味が Anthropic のサーバーへ送られます。
+  この場合、Anthropic のプライバシーポリシーが適用されます。
+</p>
+
+<h3>Weblio（「より詳しく」を押した場合のみ）</h3>
+<p>ボタンを押したときだけ、その単語を含む URL を Safari で開きます。</p>
+
+<h2>マイクと音声</h2>
+<p>
+  発音判定と「話して答える」「話して追加」でマイクを使います。
+  音声の認識は<strong>端末内で完結</strong>し、録音した音声が外部へ送られることはありません。
+  文字起こしの結果は、上記の設定をしている場合にかぎり、
+  意味の判定のために端末内のモデル（または Anthropic）へ渡されます。
+</p>
+
+<h2>子どものプライバシー</h2>
+<p>本アプリは特定の年齢層を対象に個人情報を収集する設計ではありません。</p>
+
+<h2>変更について</h2>
+<p>本ポリシーを変更する場合は、このページを更新します。</p>
+
+<h2>お問い合わせ</h2>
+<p><a href="mailto:ryu.furusawa@gmail.com">ryu.furusawa@gmail.com</a></p>
+
+<footer>
+  <p><a href="./">サポート</a> ・ <a href="privacy.html">プライバシーポリシー</a></p>
+  <p>Tefuda</p>
+</footer>
+</div>
+<script>
+document.querySelectorAll('pre').forEach(function (pre) {
+  var b = document.createElement('button');
+  b.className = 'copy'; b.textContent = 'コピー';
+  b.addEventListener('click', function () {
+    navigator.clipboard.writeText(pre.querySelector('code').innerText).then(function () {
+      b.textContent = 'コピーしました';
+      setTimeout(function () { b.textContent = 'コピー'; }, 1600);
+    });
+  });
+  pre.appendChild(b);
+});
+</script>
+</body>
+</html>
