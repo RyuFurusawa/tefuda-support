@@ -183,9 +183,6 @@ const WORD_SHEET = &#x27;単語&#x27;;
 const SENTENCE_SHEET = &#x27;文章&#x27;;
 
 // アプリが読み書きする列の見出し。並び順は問わない。
-// weblio 列は置いていない。Weblio の URL は単語から組み立てられるので、
-// 列に持つと同じ情報を二重に持つことになる。ここに &#x27;weblio&#x27; を残すと、
-// シートから列を消しても headerMap_ が末尾に作り直してしまう。
 const WORD_COLS = [
   &#x27;english&#x27;, &#x27;japanese&#x27;, &#x27;pos&#x27;, &#x27;example&#x27;, &#x27;example_jp&#x27;, &#x27;example_blank&#x27;,
   &#x27;answer_display&#x27;, &#x27;etymology&#x27;, &#x27;derivatives&#x27;, &#x27;idioms&#x27;,
