@@ -63,6 +63,15 @@ ol.steps > li::before {
   width: 30px; height: 30px; border-radius: 50%; background: var(--key); color: #fff;
   display: grid; place-items: center; font-weight: 700; font-size: 15px;
 }
+.cta {
+  display: inline-block; background: var(--key); color: #fff; text-decoration: none;
+  padding: 14px 26px; border-radius: 12px; font-weight: 600; font-size: 16px;
+  margin: 6px 0;
+}
+.cta:hover { opacity: .9; }
+details { border: 1px solid var(--line); border-radius: 12px; padding: 4px 18px; margin: 20px 0; }
+details[open] { padding-bottom: 18px; }
+summary { cursor: pointer; padding: 14px 0; font-weight: 600; }
 footer { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line);
   color: var(--muted); font-size: 14px; }
 .pill { display: inline-block; background: var(--code-bg); border: 1px solid var(--line);
@@ -85,6 +94,7 @@ footer { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line);
 <p>
   Tefuda は、あなたが Google スプレッドシートに書いた単語を、そのまま単語帳として使うアプリです。
   このページでは、その連携の設定手順を最初から順に説明します。
+  ひな形をコピーすれば、<strong>3 手順・5 分ほど</strong>で繋がります。
 </p>
 
 <div class="note">
@@ -95,9 +105,7 @@ footer { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line);
 
 <nav class="toc">
   <ol>
-    <li><a href="#prepare">スプレッドシートを用意する</a></li>
-    <li><a href="#columns">列の見出しを入れる</a></li>
-    <li><a href="#script">Apps Script を貼り付ける</a></li>
+    <li><a href="#copy">ひな形をコピーする</a></li>
     <li><a href="#deploy">ウェブアプリとして公開する</a></li>
     <li><a href="#connect">アプリに URL を入れる</a></li>
     <li><a href="#columns-ref">列の意味（一覧）</a></li>
@@ -107,35 +115,51 @@ footer { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line);
   </ol>
 </nav>
 
-<h2 id="prepare">1. スプレッドシートを用意する</h2>
+<h2 id="copy">1. ひな形をコピーする</h2>
 
-<ol class="steps">
-  <li>
-    <p>Google スプレッドシートで新しいファイルを作ります。名前は何でも構いません。</p>
-  </li>
-  <li>
-    <p>シート（画面下のタブ）を <strong>2 枚</strong>用意し、名前をそれぞれ
-    <code>単語</code> と <code>文章</code> にします。</p>
-    <div class="note warn">
-      <strong>シート名は必ずこの 2 つにしてください。</strong>
-      Apps Script はシートを<em>名前で</em>探します。名前が違うと見つけられません。
-      逆に、名前さえ合っていればタブの順番を入れ替えても壊れません。
-    </div>
-  </li>
-  <li>
-    <p>文章を使わない場合でも、<code>文章</code>シートは空のまま置いておいてください。</p>
-  </li>
-</ol>
+<p>
+  シート名も列の見出しも Apps Script も入った、そのまま使えるひな形を用意しています。
+  下のボタンから自分の Google ドライブへコピーしてください。
+</p>
 
-<h2 id="columns">2. 列の見出しを入れる</h2>
+<p><a class="cta" href="https://docs.google.com/spreadsheets/d/1Xa4RKNc8RXxMlRX9FVxEF39UNu-o-MMcCc0JuekrJgs/copy" target="_blank" rel="noopener">ひな形をコピーする</a></p>
+
+<p>
+  開くと「スプレッドシートのコピー」という画面が出るので、<strong>コピーを作成</strong>を押します。
+  自分のドライブに複製され、<strong>Apps Script も一緒にコピーされます</strong>。
+  コピーしたファイルの名前は自由に変えて構いません。
+</p>
+
+<div class="note">
+  ひな形には単語がいくつか入っています。動きを確かめたら消して、自分の単語を入れてください。
+  <code>english</code> と <code>japanese</code> だけ埋めれば充分です。品詞・例文・語源などの
+  空欄は、アプリの「空欄をまとめて埋める」でまとめて作れます。
+</div>
+
+<details>
+  <summary>自分で一から用意する場合（コピーを使わないとき）</summary>
+
+  <p>
+    すでに単語を貯めたスプレッドシートがあって、それをそのまま使いたい場合はこちらです。
+    <strong>シートと列は、あとから自動で作られます。</strong>Apps Script を貼って公開すれば、
+    初回の同期で <code>単語</code> <code>文章</code> の 2 シートと必要な列が用意されます。
+    すでにある列や、自分で足したメモ列はそのまま残ります。
+  </p>
+
+  <p>
+    したがって最低限やることは、<strong>下のコードを貼って保存する</strong>ことだけです。
+    見出しを手で揃えたい場合のために、列の並びも載せておきます。
+  </p>
+
+<h4>列の見出しを入れる</h4>
 
 <p>それぞれのシートの <strong>1 行目</strong>に、次の見出しを入れます。
 順番は自由で、間に自分用の列を挟んでも構いません（アプリは見出しの名前で探します）。</p>
 
-<h3><code>単語</code>シート</h3>
+<p><strong><code>単語</code>シート</strong></p>
 <pre><code>english	japanese	pos	example	example_jp	example_blank	answer_display	etymology	derivatives	idioms	other_meanings	synonyms	mastery	is_active	added_date	mastered_date	last_graded</code></pre>
 
-<h3><code>文章</code>シート</h3>
+<p><strong><code>文章</code>シート</strong></p>
 <pre><code>english	japanese	section	order	mastery	is_active	added_date	mastered_date	last_graded</code></pre>
 
 <div class="note">
@@ -148,7 +172,7 @@ footer { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line);
   品詞・例文・語源などの空欄は、アプリの「空欄をまとめて埋める」で自動生成できます。
 </p>
 
-<h2 id="script">3. Apps Script を貼り付ける</h2>
+<h4>Apps Script を貼り付ける</h4>
 
 <ol class="steps">
   <li><p>スプレッドシートのメニューから <strong>拡張機能 → Apps Script</strong> を開きます。</p></li>
@@ -318,7 +342,10 @@ function writeSheet_(name, cols, records) {
   アプリが知らない列（自分用のメモ列など）は、書き戻しのときもそのまま残ります。
 </div>
 
-<h2 id="deploy">4. ウェブアプリとして公開する</h2>
+
+</details>
+
+<h2 id="deploy">2. ウェブアプリとして公開する</h2>
 
 <ol class="steps">
   <li><p>Apps Script の画面で右上の <strong>デプロイ → 新しいデプロイ</strong> を選びます。</p></li>
@@ -345,7 +372,7 @@ function writeSheet_(name, cols, records) {
   </li>
 </ol>
 
-<h2 id="connect">5. アプリに URL を入れる</h2>
+<h2 id="connect">3. アプリに URL を入れる</h2>
 
 <ol class="steps">
   <li><p>Tefuda を開き、右上の <strong>≡</strong> から <strong>設定</strong> を開きます。</p></li>
@@ -358,7 +385,7 @@ function writeSheet_(name, cols, records) {
   前のシートの単語が端末に残っていると、書き戻しのときに新しいシートへ流れ込みます。
 </div>
 
-<h2 id="columns-ref">6. 列の意味（一覧）</h2>
+<h2 id="columns-ref">4. 列の意味（一覧）</h2>
 
 <p>手で埋める必要があるのは <code>english</code> と <code>japanese</code> だけです。
 他はアプリが書き込むか、自動生成できます。</p>
@@ -401,7 +428,7 @@ function writeSheet_(name, cols, records) {
   間に差し込む予定があるなら、1・2・3 ではなく 10・20・30 と振っておくと後が楽です。
 </div>
 
-<h2 id="ai">7. 例文などの自動生成について</h2>
+<h2 id="ai">5. 例文などの自動生成について</h2>
 
 <p>
   単語と訳だけ入れておけば、<strong>品詞・例文・例文の訳・語源・派生語・イディオム・他の意味・類似語</strong>を
@@ -428,7 +455,15 @@ function writeSheet_(name, cols, records) {
   設定でのオンが必要です。使えない場合は、下の「うまくいかないとき」を参照してください。
 </div>
 
-<h2 id="faq">8. うまくいかないとき</h2>
+<h2 id="faq">6. うまくいかないとき</h2>
+
+<h3>ログイン画面が出る／接続できない</h3>
+<p>
+  デプロイの「アクセスできるユーザー」が<strong>全員</strong>になっていないと、
+  アプリからの接続が Google のログイン画面へ回されて失敗します。
+  「デプロイを管理」から編集し、<strong>全員</strong>に変えたうえで、
+  バージョンを<strong>新バージョン</strong>にして更新してください。
+</p>
 
 <h3>「接続して同期」でエラーが出る</h3>
 <ul>
@@ -444,6 +479,13 @@ function writeSheet_(name, cols, records) {
   <strong>届いていません</strong>と出ている場合は、Apps Script の <code>SENT_COLS</code> に
   <code>'order'</code> が入っているか確認してください。
   <strong>列はあるが番号が空</strong>と出ている場合は、シートの <code>order</code> 列に番号を入れてください。
+</p>
+
+<h3>シートや列が足りない</h3>
+<p>
+  <code>単語</code> <code>文章</code> のシートや、アプリが使う列が無い場合は、
+  同期のときに自動で作られます。手で用意する必要はありません。
+  すでにある列や、自分で足したメモ列は消えずに残ります。
 </p>
 
 <h3>単語と文章が入れ替わってしまった</h3>
@@ -470,7 +512,7 @@ function writeSheet_(name, cols, records) {
   設定 → アクセシビリティ → 読み上げコンテンツ → 声 → 英語 から追加できます。
 </p>
 
-<h2 id="contact">9. お問い合わせ</h2>
+<h2 id="contact">7. お問い合わせ</h2>
 <p>
   不具合のご報告・ご要望は、下記までお願いします。
   端末（iPhone / iPad）と iOS のバージョン、再現の手順を添えていただけると助かります。
