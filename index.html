@@ -365,7 +365,25 @@ function writeSheet_(name, cols, records) {
       アプリはこの URL を iPhone の Keychain に保存します。
     </div>
   </li>
-  <li><p>初回はアクセスの承認を求められます。案内に従って許可します。</p></li>
+  <li>
+    <p>初回はアクセスの承認を求められます。</p>
+    <p>
+      このとき <strong>「このアプリは Google で確認されていません」</strong>
+      （Google hasn't verified this app）という警告が出ます。<strong>そのまま進めて構いません。</strong>
+      自分で用意したスクリプトを初めて承認するときに必ず出るもので、
+      Google の審査を通していないスクリプトはすべてこう表示されます。
+      アクセスするのは<strong>自分のスプレッドシートだけ</strong>です。
+    </p>
+    <p>
+      左下の <strong>詳細</strong>（Advanced）→
+      <strong>（プロジェクト名）に移動（安全ではないページ）</strong> →
+      <strong>許可</strong> と進んでください。
+    </p>
+    <div class="note">
+      この警告が出るのは<strong>自分が最初に承認するときだけ</strong>です。
+      「自分」として実行する設定にしてあるので、アプリから同期する側には表示されません。
+    </div>
+  </li>
   <li>
     <p>表示される <strong>ウェブアプリの URL</strong> をコピーします。
     <code>https://script.google.com/macros/s/……/exec</code> という形です。</p>
@@ -456,6 +474,13 @@ function writeSheet_(name, cols, records) {
 </div>
 
 <h2 id="faq">6. うまくいかないとき</h2>
+
+<h3>「このアプリは Google で確認されていません」と出る</h3>
+<p>
+  自分のスクリプトを初めて承認するときに必ず出る警告です。そのまま進めて構いません。
+  <strong>詳細</strong>（Advanced）→ <strong>（プロジェクト名）に移動</strong> →
+  <strong>許可</strong> と進んでください。一度承認すれば、以後は出ません。
+</p>
 
 <h3>ログイン画面が出る／接続できない</h3>
 <p>
